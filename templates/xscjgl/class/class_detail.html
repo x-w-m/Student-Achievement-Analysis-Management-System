@@ -1,27 +1,32 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/common_detail.css' %}">
+{% endblock %}
 
 {% block content %}
-    <div class="container mt-4">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h2 class="card-title mb-0">班级详情: {{ object.name }}</h2>
+    <h2 class="mb-4">班级详情</h2>
+    <div class="card">
+        <div class="card-header">班级详情</div>
+        <div class="card-body">
+            <div class="detail-item">
+                <strong>班级名称：</strong>
+                <span>{{ object.name }}</span>
             </div>
-            <div class="card-body">
-                <p><strong>班级名称:</strong> {{ object.name }}</p>
-                <p><strong>年级:</strong> {{ object.year }}</p>
-                <p><strong>科目组:</strong> {{ object.subject_group }}</p>
+            <div class="detail-item">
+                <strong>年级：</strong>
+                <span>{{ object.year }}</span>
             </div>
-            <div class="card-footer text-end">
-                <a href="{% url 'class_update' object.pk %}" class="btn btn-warning btn-sm me-2">
-                    <i class="bi bi-pencil-square"></i> 编辑
-                </a>
-                <a href="{% url 'class_delete' object.pk %}" class="btn btn-danger btn-sm me-2">
-                    <i class="bi bi-trash"></i> 删除
-                </a>
-                <a href="{% url 'class_list' %}" class="btn btn-secondary btn-sm">
-                    <i class="bi bi-arrow-left"></i> 返回班级列表
-                </a>
+            <div class="detail-item">
+                <strong>科目组：</strong>
+                <span>{{ object.subject_group }}</span>
             </div>
         </div>
+    </div>
+    <div class="action-buttons">
+        <a href="{% url 'class_update' object.pk %}" class="btn btn-secondary">编辑</a>
+        <a href="{% url 'class_delete' object.pk %}" class="btn btn-danger">删除</a>
+        <a href="{% url 'class_list' %}" class="btn btn-primary">返回列表</a>
     </div>
 {% endblock %}
