@@ -1,6 +1,9 @@
 {% extends "base.html" %}
-{% load form_tags %}  <!-- 加载自定义模板标签 -->
-
+{% load static %}
+{% load form_tags %} <!-- 加载自定义模板标签 -->
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/form_styles.css' %}">
+{% endblock %}
 {% block content %}
     <h2>{% if object %}更新{% else %}创建{% endif %}考试</h2>
 
@@ -34,10 +37,45 @@
                 请填写年级。
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">保存</button>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">保存</button>
+            {#处理创建与更新的不同逻辑#}
+            {% if object and object.pk %}
+                <!-- 如果考试已保存，按钮可用 -->
+                <a href="{% url 'import_student_numbers' object.pk %}" class="btn btn-info">导入学生考号</a>
+            {% else %}
+                <!-- 使用模态框提示 -->
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#saveExamModal">
+                    导入学生考号
+                </button>
+            {% endif %}
+
+            <a href="{% url 'exam_list' %}" class="btn btn-secondary">返回列表</a>
+        </div>
+
+        <!-- 模态框代码,用于再创建考试时提示用户先保存考试，再编辑导入考生考号信息。 -->
+        <div class="modal fade" id="saveExamModal" tabindex="-1" aria-labelledby="saveExamModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content border-0 shadow-lg rounded-4">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="saveExamModalLabel">提示</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                         编辑考试状态才能导入学生考号，请先保存考试信息，然后编辑。
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
     </form>
 
-    <a href="{% url 'exam_list' %}" class="btn btn-secondary mt-3">返回列表</a>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const examTime = "{{ form.exam_time.value|date:'Y-m-d' }}";
@@ -46,5 +84,4 @@
             }
         });
     </script>
-
 {% endblock %}

@@ -26,11 +26,32 @@
                 <strong>年级：</strong>
                 <span>{{ object.grade }}</span>
             </div>
+            <div class="detail-item">
+                <strong>参考人数：</strong>
+                <span>
+                    {% if candidate_count > 0 %}
+                        {{ candidate_count }} 人
+                    {% else %}
+                        还没有考生报考，请 <a href="{% url 'import_student_numbers' object.pk %}">导入考生考号</a>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="detail-item">
+                <strong>考试成绩：</strong>
+                <span>
+                    {% if score_count > 0 %}
+                        <a href="{% url 'exam_scores' object.pk %}">查看学生成绩</a>
+                    {% else %}
+                        还未导入考生成绩，请 <a href="{% url 'import_exam_scores' object.pk %}">导入考生成绩</a>
+                    {% endif %}
+                </span>
+            </div>
         </div>
     </div>
     <div class="action-buttons">
         <a href="{% url 'exam_update' object.pk %}" class="btn btn-secondary">编辑</a>
         <a href="{% url 'exam_delete' object.pk %}" class="btn btn-danger">删除</a>
+        <a href="{% url 'exam_scores' object.pk %}" class="btn btn-info">查看成绩</a>
         <a href="{% url 'exam_list' %}" class="btn btn-primary">返回列表</a>
     </div>
 {% endblock %}
