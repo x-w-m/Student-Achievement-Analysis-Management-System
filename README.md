@@ -121,4 +121,4 @@ python manage.py runserver
 ---
 
 ## 许可证
-本项目基于 [MIT License](LICENSE)。
+本项目基于 [GPL v3 License](LICENSE)。
