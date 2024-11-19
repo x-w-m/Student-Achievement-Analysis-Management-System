@@ -23,7 +23,8 @@ from django.contrib.auth import views as auth_views
 
 from xscjgl.views.class_views import ClassListView, ClassCreateView, ClassUpdateView, ClassDeleteView, ClassDetailView, \
     ClassBulkUploadView, UpdateClassesBasedOnGradeView
-from xscjgl.views.exam_views import ExamListView, ExamCreateView, ExamUpdateView, ExamDeleteView, ExamDetailView
+from xscjgl.views.exam_views import ExamListView, ExamCreateView, ExamUpdateView, ExamDeleteView, ExamDetailView, \
+    ImportStudentExamNumbersView, ImportExamScoresView, ExamScoresView
 
 urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
@@ -54,5 +55,9 @@ urlpatterns = [
     path('exam/create/', ExamCreateView.as_view(), name='exam_create'),  # 创建考试
     path('exam/update/<int:pk>/', ExamUpdateView.as_view(), name='exam_update'),  # 更新考试
     path('exam/delete/<int:pk>/', ExamDeleteView.as_view(), name='exam_delete'),  # 删除考试
+
+    path('exam/import_stu_num/<int:pk>', ImportStudentExamNumbersView.as_view(), name='import_student_numbers'),
+    path('exam/import_exam_scores/<int:pk>/', ImportExamScoresView.as_view(), name='import_exam_scores'),
+    path('exam/scores/<int:pk>/', ExamScoresView.as_view(), name='exam_scores'),
 
 ]
