@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load form_tags %}  <!-- 加载自定义模板标签 -->
+
+{% block content %}
+    <h2>{% if object %}更新{% else %}创建{% endif %}考试</h2>
+
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_exam_name" class="form-label">考试名称</label>
+            {{ form.exam_name|add_class:"form-control" }}
+            <div class="invalid-feedback">
+                请填写考试名称。
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="id_exam_time" class="form-label">考试时间</label>
+            {{ form.exam_time|add_class:"form-control" }}
+            <div class="invalid-feedback">
+                请选择考试时间。
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="id_exam_place" class="form-label">考试平台</label>
+            {{ form.exam_platform|add_class:"form-control" }}
+            <div class="invalid-feedback">
+                请填写考试平台。
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="id_grade" class="form-label">年级</label>
+            {{ form.grade|add_class:"form-control" }}
+            <div class="invalid-feedback">
+                请填写年级。
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">保存</button>
+    </form>
+
+    <a href="{% url 'exam_list' %}" class="btn btn-secondary mt-3">返回列表</a>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const examTime = "{{ form.exam_time.value|date:'Y-m-d' }}";
+            if (examTime) {
+                document.getElementById("id_exam_time").value = examTime;
+            }
+        });
+    </script>
+
+{% endblock %}

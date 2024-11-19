@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    班级列表
+{% endblock %}
+
+{% block extra_css %}
+    <!-- 引入该页面特有的CSS样式 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">班级列表</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="{% url 'class_create' %}" class="btn btn-primary">创建新班级</a>
+        <!-- 右侧搜索框 -->
+        <form method="get" action="" class="search-form">
+            <label>
+                <input
+                        type="text"
+                        name="search"
+                        class="form-control form-control-sm"
+                        placeholder="请输入班级名称"
+                        value="{{ request.GET.search|default:'' }}">
+            </label>
+            <button type="submit" class="btn btn-outline-secondary">搜索</button>
+        </form>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>班级名称</th>
+            <th>年级</th>
+            <th>科目组</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for class in object_list %}
+            <tr>
+                <td><a href="{% url 'class_detail' class.pk %}">{{ class.name }}</a></td>
+                <td>{{ class.year }}</td>
+                <td>{{ class.subject_group }}</td>
+                <td>
+                    <a href="{% url 'class_update' class.pk %}" class="btn btn-sm btn-warning me-2">
+                        编辑
+                    </a>
+                    <a href="{% url 'class_delete' class.pk %}" class="btn btn-sm btn-danger">
+                        删除
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">没有班级记录。</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {#添加分页控件#}
+    {% include 'pagination.html' %}
+{% endblock %}

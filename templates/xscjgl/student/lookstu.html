@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    查看学生
+{% endblock %}
+
+{% block extra_css %}
+    <!-- 引入该页面特有的CSS样式 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+
+{% endblock %}
+
+{% block content %}
+    <h1>学生列表</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- 左侧按钮组 -->
+        <div class="btn-group">
+            <a href="{% url 'student_create' %}" class="btn btn-primary">添加学生</a>
+            <a href="{% url 'student_bulk_upload' %}" class="btn btn-primary">批量添加学生</a>
+            <a href="{% url 'student_bulk_update' %}" class="btn btn-primary">批量修改学生</a>
+        </div>
+
+        <!-- 右侧搜索框 -->
+        <form method="get" action="" class="search-form">
+            <label>
+                <input
+                        type="text"
+                        name="search"
+                        class="form-control form-control-sm"
+                        placeholder="请输入学号或姓名"
+                        value="{{ request.GET.search|default:'' }}">
+            </label>
+            <button type="submit" class="btn btn-outline-secondary">搜索</button>
+        </form>
+    </div>
+
+
+    <table>
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>年级</th>
+            <th>班级</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for student in student_list %}
+            <tr>
+                <td><a href="{% url 'student_detail' student.pk %}">{{ student.student_code }}</a></td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.grade }}</td>
+                <td>{{ student.class_enrolled.name }}</td>
+                <td>
+                    <div class="operation-forms">
+                        <form action="{% url 'student_update' student.pk %}" method="get">
+                            {% csrf_token %}
+                            <button type="submit">修改</button>
+                        </form>
+
+                        <form action="{% url 'student_delete' student.pk %}" method="get">
+                            {% csrf_token %}
+                            <button type="submit">删除</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {#添加分页控件#}
+    {% include 'pagination.html' %}
+
+{% endblock %}

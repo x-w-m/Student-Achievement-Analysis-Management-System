@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}考试删除确认{% endblock %}
+
+{% block content %}
+    <h2 class="text-danger">删除确认</h2>
+    <p class="lead">
+        您正在尝试删除以下考试的信息。请仔细核对，确认无误后再进行删除操作。
+    </p>
+
+    <table class="table table-bordered text-center">
+        <thead>
+        <tr>
+            <th>考试名称</th>
+            <th>考试时间</th>
+            <th>考试平台</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ object.exam_name }}</td>
+            <td>{{ object.exam_time }}</td>
+            <td>{{ object.exam_platform|default:"未指定" }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <form method="post">
+        {% csrf_token %}
+        <p class="text-danger">确认删除后，该考试的所有相关记录（例如学生考号、成绩信息等）将被删除，且操作无法撤销。</p>
+        <div class="d-flex flex-wrap gap-5 align-items-center">
+            <button type="submit" class="btn btn-danger">确认删除</button>
+            <a href="{% url 'exam_list' %}" class="btn btn-secondary">取消</a>
+        </div>
+    </form>
+{% endblock %}

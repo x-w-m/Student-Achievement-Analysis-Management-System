@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h2 class="card-title mb-0">班级详情: {{ object.name }}</h2>
+            </div>
+            <div class="card-body">
+                <p><strong>班级名称:</strong> {{ object.name }}</p>
+                <p><strong>年级:</strong> {{ object.year }}</p>
+                <p><strong>科目组:</strong> {{ object.subject_group }}</p>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{% url 'class_update' object.pk %}" class="btn btn-warning btn-sm me-2">
+                    <i class="bi bi-pencil-square"></i> 编辑
+                </a>
+                <a href="{% url 'class_delete' object.pk %}" class="btn btn-danger btn-sm me-2">
+                    <i class="bi bi-trash"></i> 删除
+                </a>
+                <a href="{% url 'class_list' %}" class="btn btn-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> 返回班级列表
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

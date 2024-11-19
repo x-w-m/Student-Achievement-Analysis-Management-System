@@ -1,0 +1,75 @@
+/* 标题样式 */
+h1 {
+    color: #333;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* 按钮组样式 */
+.btn-group {
+    display: flex; /* 使用弹性布局 */
+    gap: 1rem; /* 按钮之间的间距 */
+
+}
+
+/* 搜索框和按钮容器 */
+
+.search-form {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    gap: 1rem; /* 搜索框和按钮之间的间距 */
+}
+
+/* 搜索框样式 */
+
+.search-form input[type="text"] {
+    height: 36px; /* 搜索框高度 */
+    max-width: 200px; /* 限制搜索框宽度 */
+    padding: 4px 10px; /* 内边距调整 */
+    font-size: 0.9rem; /* 字体大小 */
+    border: 1px solid #ddd; /* 边框颜色 */
+    border-radius: 5px; /* 圆角样式 */
+    white-space: nowrap; /* 禁止换行 */
+}
+
+/* 搜索按钮样式 */
+
+.search-form button {
+    height: 36px; /* 按钮高度 */
+    padding: 4px 12px; /* 内边距调整 */
+    font-size: 0.9rem; /* 字体大小 */
+    border-radius: 5px; /* 圆角样式 */
+}
+
+
+/* 操作按钮样式 */
+
+.operation-forms {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* 统一表单之间的间距 */
+}
+
+.operation-forms button {
+    background-color: #ffca2c; /* 默认黄色按钮 */
+    color: #ffffff;
+    border: none;
+    padding: 5px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.operation-forms button:hover {
+    background-color: #e6b800; /* 编辑按钮悬停时加深黄色 */
+}
+
+.operation-forms form:last-child button {
+    background-color: #f44336; /* 删除按钮红色 */
+}
+
+.operation-forms form:last-child button:hover {
+    background-color: #d32f2f; /* 删除按钮悬停时加深红色 */
+}

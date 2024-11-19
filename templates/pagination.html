@@ -1,0 +1,153 @@
+<style>
+    /* 分页控件容器 */
+    .pagination-container {
+        display: flex;
+        justify-content: space-between; /* 左右对齐 */
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 10px 15px;
+    }
+
+    /* 分页表单样式 */
+    .paginate-form {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .paginate-form label {
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: #555; /* 更柔和的字体颜色 */
+    }
+
+    .paginate-form select {
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+        cursor: pointer;
+        font-size: 0.9rem;
+        height: auto;
+    }
+
+    /* 分页按钮样式 */
+    .step-links {
+        display: flex;
+        align-items: center;
+        gap: 8px; /* 调整按钮间距 */
+    }
+
+    .page-link {
+        text-decoration: none;
+        padding: 6px 14px;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
+        color: #007BFF;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        min-width: 80px; /* 保持按钮宽度一致 */
+        text-align: center;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .page-link:hover {
+        background-color: #007BFF;
+        color: #fff; /* 悬停时白色字体 */
+        border-color: #007BFF;
+    }
+
+    .page-link.disabled {
+        pointer-events: none;
+        color: #ccc;
+        background-color: #f8f9fa;
+        border-color: #ddd;
+        cursor: not-allowed;
+        opacity: 0.6; /* 调低不活跃按钮的透明度 */
+    }
+
+    /* 当前页文本样式 */
+    .current-page {
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        white-space: nowrap; /* 防止折行 */
+        background-color: #e9ecef; /* 当前页背景色 */
+        padding: 6px 14px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 768px) {
+        .pagination-container {
+            flex-wrap: wrap; /* 小屏幕时允许换行 */
+            justify-content: center; /* 居中对齐 */
+            gap: 15px;
+        }
+
+        .paginate-form {
+            justify-content: center; /* 居中对齐表单 */
+        }
+    }
+</style>
+
+
+<div class="pagination-container">
+    <!-- 总记录数 -->
+    <div class="total-records">
+        共 {{ total_count }} 条记录
+    </div>
+
+    <!-- 分页调整控件 -->
+    <div class="step-links">
+        <!-- 分页大小选择器 -->
+        <form method="get" action="" class="paginate-form">
+            <label for="paginate_by">每页显示:</label>
+            <select name="paginate_by" id="paginate_by" onchange="this.form.submit()">
+                <option value="10" {% if current_paginate_by == 10 %}selected{% endif %}>10</option>
+                <option value="20" {% if current_paginate_by == 20 %}selected{% endif %}>20</option>
+                <option value="50" {% if current_paginate_by == 50 %}selected{% endif %}>50</option>
+            </select>
+            <!-- 保留现有查询条件 -->
+            <input type="hidden" name="search" value="{{ search_query }}">
+        </form>
+    
+        <!-- 第一页按钮 -->
+        {% if page_obj.number > 1 %}
+            <a href="?page=1&paginate_by={{ current_paginate_by }}&search={{ search_query }}" class="page-link">
+                &laquo; 第一页
+            </a>
+        {% endif %}
+
+        <!-- 上一页按钮 -->
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}&paginate_by={{ current_paginate_by }}&search={{ search_query }}"
+               class="page-link">
+                上一页
+            </a>
+        {% endif %}
+
+        <!-- 当前页文本 -->
+        <span class="current-page">
+        当前页 {{ page_obj.number }} / {{ paginator.num_pages }}
+        </span>
+
+        <!-- 下一页按钮 -->
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&paginate_by={{ current_paginate_by }}&search={{ search_query }}"
+               class="page-link">
+                下一页
+            </a>
+        {% endif %}
+
+        <!-- 最后一页按钮 -->
+        {% if page_obj.number < paginator.num_pages %}
+            <a href="?page={{ paginator.num_pages }}&paginate_by={{ current_paginate_by }}&search={{ search_query }}"
+               class="page-link">
+                最后一页 &raquo;
+            </a>
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load form_tags %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sutdent_update.css' %}">  <!-- 替换为CSS文件的实际路径 -->
+{% endblock %}
+
+{% block content %}
+    <h2>{% if object %}更新{% else %}添加{% endif %}学生信息</h2>
+
+
+    <!-- 如果存在form错误，显示它们 -->
+    {% if form.errors %}
+        <div class="error">
+            <ul>
+                {{ form.errors.as_ul }}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="post" class="student-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="student_code">编号:</label>
+            {{ form.student_code|add_class:"form-control" }}
+        </div>
+
+        <div class="form-group">
+            <label for="name">姓名:</label>
+            {{ form.name|add_class:"form-control" }}
+        </div>
+
+        <div class="form-group">
+            <label for="gender">性别:</label>
+            {{ form.gender|add_class:"form-control" }}
+        </div>
+
+        <div class="form-group">
+            <label for="age">年龄:</label>
+            {{ form.age|add_class:"form-control" }}
+        </div>
+
+        <div class="form-group">
+            <label for="grade">年级:</label>
+            {{ form.grade|add_class:"form-control" }}
+        </div>
+
+        <div class="form-group">
+            <label for="class_enrolled">班级:</label>
+            <select id="class_enrolled" name="class_enrolled" required>
+                {% for class in classes %}
+                    <option value="{{ class.pk }}"
+                            {#form.class_enrolled包含字段类型，标签，帮助文本等信息，不是一个单纯的值。#}
+                            {#进行比较需要添加.value获取其value属性#}
+                            {% if class.pk == form.class_enrolled.value %}selected{% endif %}>{{ class.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="subject_group">科目组:</label>
+            {{ form.subject_group|add_class:"form-control" }}
+        </div>
+
+        <button type="submit" class="submit-button">
+            {% if object %}更新{% else %}添加{% endif %}
+        </button>
+    </form>
+
+    <a href="{% url 'student_list' %}" class="back-link">返回学生列表</a>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#id_grade").on('change', function () {
+                var grade = $(this).val();  // 获取用户输入的年级
+
+                $.ajax({
+                    url: '{% url "get_classes_based_on_grade"%}',  // Django URL 的反向解析
+                    method: 'GET',
+                    data: {
+                        'grade': grade  // 发送年级作为参数
+                    },
+                    success: function (response) {
+                        var classSelect = $("#class_enrolled");  // 指向班级下拉列表
+                        classSelect.empty();  // 清空当前选项
+
+                        // 遍历返回的班级列表，动态添加选项
+                        $.each(response.classes, function (index, klass) {
+                            classSelect.append(new Option(klass.name, klass.pk));
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("请求失败：" + error);
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

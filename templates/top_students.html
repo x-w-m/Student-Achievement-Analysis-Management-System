@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Top Students</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>总分联名前1000名学生</h1>
+    <table>
+        <tr>
+            <th>姓名</th>
+            <th>学校</th>
+            <th>年级</th>
+            <th>班级</th>
+            <th>学号</th>
+            <th>考号</th>
+            <th>原始总分</th>
+            <th>赋分总分</th>
+            <th>总分班名</th>
+            <th>总分校名</th>
+            <th>总分联名</th>
+            <th>语文成绩</th>
+            <th>语文班名</th>
+            <th>语文校名</th>
+            <th>语文联名</th>
+            <th>数学成绩</th>
+            <th>数学班名</th>
+            <!-- 更多科目 -->
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.name|default:"" }}</td>
+            <td>{{ student.school|default:"" }}</td>
+            <td>{{ student.grade|default:"" }}</td>
+            <td>{{ student.class_number|default:"" }}</td>
+            <td>{{ student.student_id|default:"" }}</td>
+            <td>{{ student.exam_id|default:"" }}</td>
+            <td>{{ student.original_total_score|default:"" }}</td>
+            <td>{{ student.adjusted_total_score|default:"" }}</td>
+            <td>{{ student.class_rank_total|default:"" }}</td>
+            <td>{{ student.school_rank_total|default:"" }}</td>
+            <td>{{ student.joint_rank_total|default:"" }}</td>
+            <td>{{ student.chinese_score|default:"" }}</td>
+            <td>{{ student.chinese_class_rank|default:"" }}</td>
+            <td>{{ student.chinese_school_rank|default:"" }}</td>
+            <td>{{ student.chinese_joint_rank|default:"" }}</td>
+            <td>{{ student.math_score|default:"" }}</td>
+            <td>{{ student.math_class_rank|default:"" }}</td>
+            <!-- 重复这个过程，为所有其他科目和排名添加列 -->
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

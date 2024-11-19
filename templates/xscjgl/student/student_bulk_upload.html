@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    批量上传学生
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">批量上传学生</h1>
+    <p class="text-muted">请上传包含学生数据的 Excel 文件（支持 .xlsx 和 .xls 格式）。</p>
+
+    <form method="post" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            <label for="student_upload" class="form-label">选择学生数据文件：</label>
+            <input 
+                type="file" 
+                id="student_upload" 
+                name="student_upload" 
+                accept=".xlsx, .xls" 
+                class="form-control" 
+                required>
+        </div>
+        <button type="submit" class="btn btn-primary">上传</button>
+    </form>
+
+    {% if errors %}
+    <div class="alert alert-danger mt-4" role="alert">
+        <h5>上传错误:</h5>
+        <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if messages %}
+    <div class="alert alert-success mt-4" role="alert">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

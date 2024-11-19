@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/common_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="mb-4">考试详情</h2>
+    <div class="card">
+        <div class="card-header">考试详情</div>
+        <div class="card-body">
+            <div class="detail-item">
+                <strong>考试名称：</strong>
+                <span>{{ object.exam_name }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>考试时间：</strong>
+                <span>{{ object.exam_time }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>考试平台：</strong>
+                <span>{{ object.exam_platform }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>年级：</strong>
+                <span>{{ object.grade }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="action-buttons">
+        <a href="{% url 'exam_update' object.pk %}" class="btn btn-secondary">编辑</a>
+        <a href="{% url 'exam_delete' object.pk %}" class="btn btn-danger">删除</a>
+        <a href="{% url 'exam_list' %}" class="btn btn-primary">返回列表</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/class_update.css' %}">  <!-- 替换为CSS文件的实际路径 -->
+{% endblock %}
+
+{% block content %}
+    <h2>{% if object %}编辑班级: {{ object.name }}{% else %}创建新班级{% endif %}</h2>
+    <form method="post" class="class-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.year.id_for_label }}">入学年份:</label>
+            {{ form.year }}
+            {{ form.year.errors }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.name.id_for_label }}">班级名称:</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.subject_group.id_for_label }}">科目组合:</label>
+            {{ form.subject_group }}
+            {{ form.subject_group.errors }}
+        </div>
+
+        <button type="submit" class="submit-button">保存</button>
+    </form>
+    <a href="{% url 'class_list' %}" class="back-link">返回班级列表</a>
+{% endblock %}

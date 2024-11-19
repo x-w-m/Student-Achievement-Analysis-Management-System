@@ -1,0 +1,81 @@
+/* 整体卡片样式 */
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+/* 卡片标题样式 */
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 15px 20px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 卡片内容容器 */
+.card-body {
+    padding: 20px;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 详情条目样式 */
+.detail-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    align-items: flex-start;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 左侧标题文字 */
+.detail-item strong {
+    color: #495057;
+    font-weight: 500;
+    font-size: 1rem;
+    flex-shrink: 0; /* 防止标题收缩 */
+    text-align: left;
+    width: 120px; /* 固定宽度，标题对齐 */
+}
+
+/* 右侧内容文字 */
+.detail-item span {
+    color: #212529;
+    font-size: 1rem;
+    text-align: left; /* 左对齐内容 */
+    flex-grow: 1; /* 内容占据剩余空间 */
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .detail-item strong,
+    .detail-item span {
+        text-align: left; /* 小屏幕左对齐所有文字 */
+        width: 100%; /* 标题宽度自适应 */
+    }
+}
+
+/* 调整按钮之间的间距 */
+.action-buttons {
+    display: flex;
+    justify-content: flex-start; /* 左对齐按钮 */
+    gap: 2rem; /* 按钮之间的间距 */
+    margin-top: 20px; /* 增加与上方卡片的间距 */
+}

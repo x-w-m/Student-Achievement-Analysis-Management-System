@@ -1,0 +1,47 @@
+.class-form {
+    max-width: 600px;      /* 设置表单的最大宽度 */
+    margin: 0 auto;        /* 中心对齐 */
+    padding: 20px;         /* 内边距 */
+    border: 1px solid #ccc; /* 边框 */
+    border-radius: 8px;    /* 圆角边框 */
+    background-color: #f9f9f9; /* 背景颜色 */
+}
+
+.form-group {
+    margin-bottom: 15px;    /* 每个表单组的底部间距 */
+}
+
+.form-group label {
+    font-weight: bold;       /* 标签加粗 */
+    display: block;          /* 标签占据整行 */
+    margin-bottom: 5px;      /* 标签底部间距 */
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;             /* 输入框和选择框宽度100% */
+    padding: 8px;           /* 内边距 */
+    border-radius: 4px;     /* 圆角边框 */
+    border: 1px solid #ccc;  /* 边框 */
+    box-sizing: border-box;  /* 包括填充和边框 */
+}
+
+.submit-button {
+    padding: 10px 15px;    /* 按钮内边距 */
+    border: none;           /* 去掉边框 */
+    border-radius: 4px;    /* 圆角边框 */
+    background-color: #4CAF50; /* 按钮背景色 */
+    color: white;           /* 按钮字体颜色 */
+    cursor: pointer;        /* 鼠标悬停时变成手型 */
+}
+
+.back-link {
+    display: inline-block;  /* 使链接显示为块级元素 */
+    margin-top: 20px;      /* 顶部间距 */
+    color: #007BFF;        /* 链接颜色 */
+    text-decoration: none;  /* 去掉下划线 */
+}
+
+.back-link:hover {
+    text-decoration: underline; /* 悬停时增加下划线 */
+}

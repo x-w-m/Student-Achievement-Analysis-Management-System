@@ -1,0 +1,96 @@
+/* 全局样式 */
+body {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9; /* 更加柔和的背景色 */
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 确保内容覆盖整个视窗高度 */
+}
+
+h2 {
+    color: #333; /* 默认标题颜色 */
+    margin-top: 0; /* 清除可能的外边距 */
+}
+
+.navbar {
+    margin-bottom: 1rem; /* 使用 rem 替代 px，响应式更友好 */
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+    .navbar {
+        text-align: center;
+    }
+
+    .navbar-nav {
+        margin-top: 0.5rem; /* 更小的间距 */
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap; /* 使表格在小屏幕上滚动显示 */
+    }
+}
+
+.nav-item .nav-link {
+    padding: 0.625rem 1rem; /* 转换为 rem 单位 */
+}
+
+/* 容器样式 */
+.container {
+    background-color: #f4f4f4;
+    width: 80%;
+    margin: auto;
+    padding: 1rem 6rem;;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加轻微阴影 */
+    overflow: hidden;
+}
+
+/* 表格样式 */
+table {
+    width: 100%;
+    margin-top: 1.25rem;
+    border-collapse: collapse;
+    text-align: center;
+    background-color: #fff; /* 表格背景色 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 轻微阴影增强表格视觉 */
+}
+
+table thead {
+    background-color: #4CAF50; /* Bootstrap 风格的蓝色 */
+    color: #fff; /* 白色文字 */
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 0.75rem; /* 增加间距，改善可读性 */
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f7f7f7; /* 更柔和的偶数行背景色 */
+}
+
+table tbody tr:hover {
+    background-color: #e9ecef; /* 鼠标悬停效果 */
+}
+
+/* 页脚样式 */
+footer {
+    background-color: #f8f9fa;
+    padding: 0.625rem;
+    margin-top: auto;
+    border-top: 1px solid #ddd; /* 分隔线更明确 */
+    text-align: center; /* 居中对齐 */
+}
+
+footer p {
+    margin: 0;
+    color: #6c757d; /* 较淡的文字颜色 */
+}

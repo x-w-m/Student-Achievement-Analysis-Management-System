@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    查看考试
+{% endblock %}
+
+{% block extra_css %}
+    <!-- 引入该页面特有的CSS样式 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>考试列表</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="{% url 'exam_create' %}" class="btn btn-primary mb-3">创建考试</a>
+        <!-- 右侧搜索框 -->
+        <form method="get" action="" class="search-form">
+            <label>
+                <input
+                        type="text"
+                        name="search"
+                        class="form-control form-control-sm"
+                        placeholder="考试名称"
+                        value="{{ request.GET.search|default:'' }}">
+            </label>
+            <button type="submit" class="btn btn-outline-secondary">搜索</button>
+        </form>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>考试名称</th>
+            <th>考试时间</th>
+            <th>考试平台</th>
+            <th>年级</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for exam in object_list %}
+            <tr>
+                <td>
+                    <a href="{% url 'exam_detail' exam.pk %}" class="exam-detail-link">{{ exam.exam_name }}</a>
+                </td>
+                <td>{{ exam.exam_time }}</td>
+                <td>{{ exam.exam_platform }}</td>
+                <td>{{ exam.grade }}</td>
+                <td>
+                    <div class="operation-forms">
+                        <form action="{% url 'exam_update' exam.pk %}" method="get">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-warning">编辑</button>
+                        </form>
+
+                        <form action="{% url 'exam_delete' exam.pk %}" method="get">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger">删除</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">没有找到考试记录。</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {#添加分页控件#}
+    {% include 'pagination.html' %}
+
+{% endblock %}
