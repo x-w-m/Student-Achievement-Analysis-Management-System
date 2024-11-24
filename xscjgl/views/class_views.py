@@ -31,18 +31,6 @@ class ClassListView(BaseListView):
             )
         return queryset
 
-    def get_paginate_by(self, queryset):
-        """
-        动态获取每页显示的记录数，通过 URL 参数 `paginate_by`。
-        """
-        try:
-            paginate_by = int(self.request.GET.get('paginate_by', self.paginate_by))
-            if paginate_by in self.allowed_paginate_sizes:
-                return paginate_by
-        except (ValueError, TypeError):
-            pass
-        return self.paginate_by
-
 
 class ClassDetailView(DetailView):
     model = Class

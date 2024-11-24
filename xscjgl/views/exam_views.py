@@ -35,7 +35,6 @@ class ExamListView(BaseListView):
     model = Exam
     template_name = 'xscjgl/exam/exam_list.html'
 
-
     def get_queryset(self):
         """
         返回排序和过滤后的考试数据，默认按考试时间排序。
@@ -49,8 +48,6 @@ class ExamListView(BaseListView):
             queryset = queryset.filter(exam_name__icontains=search_query)
 
         return queryset
-
-
 
 
 class ExamCreateView(CreateView):
@@ -95,7 +92,7 @@ class ImportStudentExamNumbersView(View):
 
     def post(self, request, pk):
         """
-        处理上传的 Excel 文件并批量导入学生考号。
+        处理上传的 Excel 文件并批量导入考号。
         """
         # 获取指定考试
         exam = get_object_or_404(Exam, pk=pk)
@@ -158,10 +155,11 @@ class ImportStudentExamNumbersView(View):
         if errors:
             return render(request, self.template_name, {'exam': exam, 'errors': errors})
 
-        messages.success(request, f"成功导入 {records_created} 条学生考号记录。")
+        messages.success(request, f"成功导入 {records_created} 条考号记录。")
         return redirect('exam_detail', pk=pk)
 
 
+# TODO 测试逻辑可行性
 class ImportExamScoresView(View):
     template_name = "xscjgl/exam/import_exam_scores.html"
 
@@ -169,76 +167,103 @@ class ImportExamScoresView(View):
         exam = get_object_or_404(Exam, pk=pk)
         return render(request, "xscjgl/exam/import_exam_scores.html", {"exam": exam})
 
-    def post(self, request, pk):
-        exam = get_object_or_404(Exam, pk=pk)
-        excel_file = request.FILES.get('score_file')
 
-        # 初始化错误列表
-        errors = []
+def post(self, request, pk):
+    exam = get_object_or_404(Exam, pk=pk)
+    excel_file = request.FILES.get('score_file')
 
-        # 检查是否上传了文件
-        if not excel_file:
-            errors.append("请上传 Excel 文件。")
-            return render(request, self.template_name, {"exam": exam, "errors": errors})
+    # 初始化错误列表
+    errors = []
 
-        # 保存上传的文件
-        fs = UploadStorage(sub_path="exam_scores")
-        filename = fs.save(excel_file.name, excel_file)
-        file_path = fs.path(filename)
+    # 检查是否上传了文件
+    if not excel_file:
+        errors.append("请上传 Excel 文件。")
+        return render(request, self.template_name, {"exam": exam, "errors": errors})
 
-        scores_to_create = []
+    scores_to_create = []
 
-        try:
-            with transaction.atomic():
-                # 读取 Excel 文件
-                df = pd.read_excel(file_path, dtype=str)
-                df.dropna(axis=1, how='all', inplace=True)  # 移除全空列
+    try:
+        # 读取 Excel 文件
+        df = pd.read_excel(excel_file, dtype=str)
+        df.dropna(axis=1, how='all', inplace=True)  # 移除全空列
 
-                # 检查必要的列是否存在
-                required_columns = ['学生编号', '总成绩']
-                for col in required_columns:
-                    if col not in df.columns:
-                        errors.append(f"缺少必要的列: {col}")
-                        raise ValueError("文件格式错误。")
+        # 检查必要的列是否存在
+        required_columns = ['考号']  # 必须有考号列
+        for col in required_columns:
+            if col not in df.columns:
+                errors.append(f"缺少必要的列: {col}")
+                return render(request, self.template_name, {"exam": exam, "errors": errors})
 
-                # 遍历 Excel 文件中的数据
-                for index, row in df.iterrows():
-                    try:
-                        student_code = row['学生编号']
-                        total_score = row['总成绩']
+        # 映射中文列名到模型字段
+        field_mapping = {
+            '总成绩': 'total_score_original',
+            '总成绩赋分': 'total_score_assigned',
+            '班级排名': 'class_rank',
+            '学校排名': 'school_rank',
+            '语文': 'chinese_score_original',
+            '数学': 'math_score_original',
+            '英语': 'foreign_language_score_original',
+            '物理': 'physics_score_original',
+            '历史': 'history_score_original',
+            '化学': 'chemistry_score_original',
+            '化学赋分': 'chemistry_score_assigned',
+            '生物': 'biology_score_original',
+            '生物赋分': 'biology_score_assigned',
+            '政治': 'politics_score_original',
+            '政治赋分': 'politics_score_assigned',
+            '地理': 'geography_score_original',
+            '地理赋分': 'geography_score_assigned',
+        }
 
-                        # 获取学生和考生号信息
-                        student = Student.objects.get(student_code=student_code)
-                        student_exam_number = StudentExamNumber.objects.get(student=student, exam=exam)
+        # 遍历 Excel 数据
+        for index, row in df.iterrows():
+            # 提取考号
+            student_exam_number_value = row['考号']
+            try:
 
-                        # 创建成绩对象
-                        score = Score(
-                            student=student,
-                            exam=exam,
-                            exam_number=student_exam_number,
-                            total_score_original=float(total_score),
-                        )
-                        scores_to_create.append(score)
-                    except Exception as e:
-                        errors.append(f"行 {index + 2} 错误: {e}")
+                # 查找学生和考号记录
+                student_exam_number = StudentExamNumber.objects.get(
+                    exam=exam,
+                    exam_candidate_number=student_exam_number_value
+                )
+                student = student_exam_number.student
 
-                # 如果存在错误，终止导入
-                if errors:
-                    raise ValueError("上传数据存在错误，请检查以下错误详情。")
+                # 动态生成成绩对象的数据
+                score_data = {
+                    'student': student,
+                    'exam': exam,
+                    'exam_number': student_exam_number,
+                }
+                for chinese_col, model_field in field_mapping.items():
+                    score_data[model_field] = (
+                        float(row.get(chinese_col, None)) if row.get(chinese_col) else None
+                    )
 
-                # 批量创建成绩记录
-                Score.objects.bulk_create(scores_to_create)
+                # 创建成绩对象
+                scores_to_create.append(Score(**score_data))
 
-        except Exception as e:
-            if not errors:  # 捕获其他非数据相关的异常
-                errors.append(f"导入失败: {e}")
+            except StudentExamNumber.DoesNotExist:
+                errors.append(f"行 {index + 2} 错误: 考号 {student_exam_number_value} 未找到。")
+            except Exception as e:
+                errors.append(f"行 {index + 2} 错误: {e}")
 
-        # 返回模板并显示错误或成功消息
+        # 如果存在错误，终止导入
         if errors:
             return render(request, self.template_name, {"exam": exam, "errors": errors})
 
-        messages.success(request, f"成功导入 {len(scores_to_create)} 条成绩记录。")
-        return redirect("exam_detail", pk=exam.pk)
+        # 批量创建成绩记录
+        with transaction.atomic():
+            Score.objects.bulk_create(scores_to_create)
+
+    except Exception as e:
+        errors.append(f"导入失败: {e}")
+
+    # 返回模板并显示错误或成功消息
+    if errors:
+        return render(request, self.template_name, {"exam": exam, "errors": errors})
+
+    messages.success(request, f"成功导入 {len(scores_to_create)} 条成绩记录。")
+    return redirect("exam_detail", pk=exam.pk)
 
 
 class ExamScoresView(BaseListView):

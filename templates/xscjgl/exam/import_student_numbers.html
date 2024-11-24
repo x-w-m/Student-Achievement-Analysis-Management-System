@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    导入学生考号
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">导入学生考号</h1>
+    <p class="text-muted">请上传包含学生考号信息的 Excel 文件（支持 .xlsx 和 .xls 格式）。</p>
+
+    <form method="post" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            <label for="file" class="form-label">选择文件：</label>
+            <input 
+                type="file" 
+                id="file" 
+                name="exam_numbers_upload" 
+                accept=".xlsx, .xls" 
+                class="form-control" 
+                required>
+        </div>
+        <button type="submit" class="btn btn-primary">上传</button>
+    </form>
+
+    {% if messages %}
+    <div class="alert alert-success mt-4" role="alert">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if errors %}
+    <div class="alert alert-danger mt-4" role="alert">
+        <h5>导入错误:</h5>
+        <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <a href="{% url 'exam_update' exam.pk %}" class="btn btn-secondary mt-3">返回考试编辑</a>
+</div>
+{% endblock %}
